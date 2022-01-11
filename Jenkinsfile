@@ -14,21 +14,12 @@ pipeline{
             }
         }
     
-        stage('deploying application to staging envirenment'){
-        steps{
-            build job :  'Deploy_Application_Staging_Env'
-        }
-       
-      }
-       stage('Deploy to production'){
-        steps{
-            //if not approved in 5 days then the buid will be discated
-            timeout(time:5,unit:'DAYS'){
-                input message: 'Approval for Production Deployement ?'
+        stage('create tomcat image docker'){
+            steps{
+                sh 'docker build . -t tomcatsamplewebapp:${env.BUILD_ID}'
             }
-            build job : 'Deploy_Application_Production_Env'
-
         }
-      }
+           
+       
     }
 }
